@@ -1,17 +1,69 @@
 'use strict'
+const mongoose = require('mongoose');
 
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema; //permite definir los schemas
+const Schema = mongoose.Schema;
 
-var UserSchema = Schema({
-    name: String,
-    surname: String,
-    nick: String,
-    email: String,
-    password: String,
-    rol: String,
-    image: String
-}); //estructura que va a tener todos los objetos
+// esquema
+const User = new Schema({
+    name: {
+        type: String,
+        required: [true, 'El nombre es requerido'],
+        validate: {
+            validator: function(value) {
+                return value.length >= 3;
+            },
+            message: 'El nombre debe tener al menos 3 caracteres'
+        }
+    },
+    surname: {
+        type: String,
+        required: [true, 'El apellido es requerido'],
+        validate: {
+            validator: function(value) {
+                return value.length >= 3;
+            },
+            message: 'El apellido debe tener al menos 3 caracteres'
+        }
+    },
+    nick: {
+        type: String,
+        unique: true,
+        required: [true, 'El apellido es requerido'],
+        validate: {
+            validator: function(value) {
+                return value.length >= 3;
+            },
+            message: 'El apellido debe tener al menos 3 caracteres'
+        } 
+    },
+    email: {
+        type: String,
+        unique: true,
+        required: [true, 'El email es requerido'],
+        validate: {
+            validator: function(value) {
+                var pattern = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+                return pattern.test(value);
+            },
+            message: '{VALUE} no es un email valido',
+          }
+    },
+    password: {
+        type: String,
+        required: [true, 'La contrasenia es requerida'],
+    },
+    rol: {
+        type: String
+    },
+    image: {
+        type: String
+    }
+}); 
 
-//para poder utilizar el modelo en otros ficheros
-module.exports = mongoose.model('User', UserSchema); //(nombre de la entidad,nombre del schema)
+// indices
+User.index({name: 1});
+User.index({nick: 1});
+User.index({email: 1});
+
+// exporto el modelo
+module.exports = mongoose.model('User', User);
