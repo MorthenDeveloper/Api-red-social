@@ -119,8 +119,16 @@ function loginUser(req, res) {
 
 //conseguir datos de un usuario
 function getUser(req, res) {
+    
     var userId = req.params.id; //los datos que vienen por URL están en params, los datos por post o put es BODY
-
+    
+    return User.findById(userId, function(err, users){
+        if (err) {
+            return res.status(500).json({ message: 'Error en la petición' });
+        }
+        return res.json(users);
+    });
+    /*
     User.findById(userId, (err, user) => { //error, usuario que va a devolver la consulta
         if (err) {
             return res.status(500).send({ message: 'Error en la petición' })
@@ -130,15 +138,17 @@ function getUser(req, res) {
         }else{
             followThisUser(req.user.sub,userId).then((value)=>{
                 user.password=undefined;
-                return res.status(200).send({ 
-                    user,
-                    following:value.following,
-                    followed:value.followed
+                return res.status(200).json({ 
+                    user
+                    //,
+                    //following:value.following,
+                    //followed:value.followed
                  }); 
             });
         }
             
     });
+    */
 
 }
 
