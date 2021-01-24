@@ -25,7 +25,7 @@ const User = new Schema({
             message: 'El apellido debe tener al menos 3 caracteres'
         }
     },
-    nick: {
+    nickname: {
         type: String,
         unique: true,
         required: [true, 'El apellido es requerido'],
@@ -52,8 +52,8 @@ const User = new Schema({
         type: String,
         required: [true, 'La contrasenia es requerida'],
     },
-    rol: {
-        type: String
+    roles: {
+        type: [String]
     },
     image: {
         type: String

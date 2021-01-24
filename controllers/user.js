@@ -31,19 +31,19 @@ function saveUser(req, res) {
     var params = req.body; //para recoger los parámetros de la request(los campos que lleguen por post)
     var user = new User(); //creamos un objeto del modelo
 
-    if (params.name && params.surname && params.nick && params.email && params.password) {
+    if (params.name && params.surname && params.nickname && params.email && params.password) {
         user.name = params.name;
         user.surname = params.surname;
-        user.nick = params.nick;
+        user.nickname = params.nickname;
         user.email = params.email;
-        user.rol = 'ROL_USER';
+        user.roles = params.roles;
         user.image = null;
 
         //CONTROLAR USUARIOS DUPLICADOS,
         User.find({
             $or: [
                 { email: user.email.toLowerCase() }, //si el email ya existe en la bd
-                { nick: user.nick.toLowerCase() } //si el nick ya existe en la bd
+                { nickname: user.nickname.toLowerCase() } //si el nickname ya existe en la bd
             ]
         }).exec((err, users) => {
             if (err) { //si existe algún error

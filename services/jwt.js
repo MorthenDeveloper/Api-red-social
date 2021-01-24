@@ -9,9 +9,9 @@ exports.createToken = function(user) {
         sub: user._id, //identificador
         name: user.name,
         surname: user.surname,
-        nick: user.nick,
+        nickname: user.nickname,
         email: user.email,
-        rol: user.rol,
+        roles: user.roles,
         image: user.image,
         iat: moment().unix(), //momento cuando se crea el token
         exp: moment().add(30, 'days').unix //momento a expirar
