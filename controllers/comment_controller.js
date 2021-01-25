@@ -33,7 +33,33 @@ function getComments(req, res) {
     });
 }
 
+function getCommentById(req, res) {
+    
+    var commentId = req.params.id; //los datos que vienen por URL están en params, los datos por post o put es BODY
+    
+    return Comment.findById(commentId, function(err, comment){
+        if (err) {
+            return res.status(500).json({ message: 'Error en la petición' });
+        }
+        return res.json(comment);
+    });
+}
+
+function getCommentsByPostId(req, res) {
+    
+    var postId = req.params.postId; //los datos que vienen por URL están en params, los datos por post o put es BODY
+    
+    return Comment.findByPostId(postId, function(err, comments){
+        if (err) {
+            return res.status(500).json({ message: 'Error en la petición' });
+        }
+        return res.json(comments);
+    });
+}
+
 module.exports = {
     saveComment,
-    getComments
+    getComments,
+    getCommentById,
+    getCommentsByPostId,
 }
