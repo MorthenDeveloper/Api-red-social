@@ -18,6 +18,7 @@ var user_routes = require('./routes/user');
 var follow_routes = require('./routes/follow');
 var post_routes = require('./routes/post_routes');
 var comment_routes = require('./routes/comment_routes');
+var message_routes = require('./routes/message_routes');
 
 //cargar middlewares, ocurrirá en cada una de las peticiones que se haga a la API
 app.use(bodyParser.urlencoded({ extended: false })); //en cada petición se ejecutará este middleware
@@ -28,6 +29,7 @@ app.use('/api', user_routes); //permite hacer middleware, quiere decir que a cad
 app.use('/api', follow_routes);
 app.use('/api', post_routes);
 app.use('/api', comment_routes);
+app.use('/api', message_routes);
 
 //exportar
 module.exports = app;
