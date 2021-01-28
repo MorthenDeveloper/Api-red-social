@@ -128,28 +128,6 @@ function getUser(req, res) {
         }
         return res.json(users);
     });
-    /*
-    User.findById(userId, (err, user) => { //error, usuario que va a devolver la consulta
-        if (err) {
-            return res.status(500).send({ message: 'Error en la petición' })
-        }
-        if (!user) {
-            return res.status(404).send({ message: 'El usuario no existe' })
-        }else{
-            followThisUser(req.user.sub,userId).then((value)=>{
-                user.password=undefined;
-                return res.status(200).json({ 
-                    user
-                    //,
-                    //following:value.following,
-                    //followed:value.followed
-                 }); 
-            });
-        }
-            
-    });
-    */
-
 }
 
 async function followThisUser(identity_user_id,user_id){
@@ -177,56 +155,13 @@ async function followThisUser(identity_user_id,user_id){
 
 //Devolver un listado de usuarios paginado
 function getUsers(req, res) {
-    //va a listar los usuarios que están en la red social
-    /*var identity_user_id = req.user.sub; //id del usuario logeado
 
-    var page = 1;
-    if (req.params.page) { //comrpobar que nos llega por la pag la página
-        page = req.params.page;
-    }
-    */
     return User.find({}, function(err, users){
         if (err) {
             return res.status(500).json({ message: 'Error en la petición' });
         }
         return res.json(users);
     });
-    //return res.status(200).send(users);
-        /*
-         if (!users) {
-            return res.status(404).send({ message: 'No hay usuarios disponibles' });
-        } else {
-            return res.status(200).send({users});
-        }
-            return res.status(200).send({});
-    });
-        */
-
-    
-
-    /*
-    var itemsPerPage = 5; //cantidad de usuarios que se van a mostrar por página
-
-    User.find().sort('_id').paginate(page, itemsPerPage, (err, users, total) => { //página actual,cantidad de registros por página
-        if (err) {
-            return res.status(500).send({ message: 'Error en la petición' });
-        }
-        if (!users) {
-            return res.status(404).send({ message: 'No hay usuarios disponibles' });
-        } else {
-            followUserIds(identity_user_id).then((value)=>{
-                return res.status(200).send({
-                    users
-                    , //users:users ->lo mismos
-                    user_following:value.following,//usuarios que estoy siguiendo
-                    user_follow_me:value.followed,//usuarios que me siguen
-                    total,
-                    pages: Math.ceil(total / itemsPerPage) //paginas totales
-                });
-            });           
-        }
-    });
-    */
 }
 
 //DEOVLVER LOS USUARIOS QUE SEGUIMOS Y LOS QUE NOS SIGUEN

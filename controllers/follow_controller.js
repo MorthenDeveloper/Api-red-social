@@ -16,12 +16,12 @@ function saveFollow(req, res) {
 
     follow.save((err, followStored) => { //error, documento guardado
         if (err) {
-            return res.status(500).send({ message: 'Error al guardar el seguimiento' });
+            return res.status(500).json({ message: 'Error al guardar el seguimiento' });
         }
         if (!followStored) {
-            return res.status(404).send({ message: 'El seguimiento se ha guardado' });
+            return res.status(404).json({ message: 'El seguimiento se ha guardado' });
         } else {
-            return res.status(200).send({ follow: followStored }); //propiedad,follow guardado(objeto)
+            return res.status(200).json({ follow: followStored }); //propiedad,follow guardado(objeto)
         }
     })
 }
@@ -138,11 +138,22 @@ function getMyFollows(req,res) {
     });
 }
 
+function getFollowByUserFollow(req, res) {
+    var followId = req.params.id; //los datos que vienen por URL están en params, los datos por post o put es BODY
+    
+    return Follow.findByFollowed(followId, function(err, follow){
+        if (err) {
+            return res.status(500).json({ message: 'Error en la petición' });
+        }
+        return res.json(follow);
+    });
+}
 
 module.exports = {
     saveFollow,
     deleteFollow,
     getFollowingUsers,
     getFollowedUsers,
-    getMyFollows
+    getMyFollows,
+    getFollowByUserFollow
 }

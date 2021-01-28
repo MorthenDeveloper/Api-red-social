@@ -15,7 +15,7 @@ app.use((req, res, next) => {
 
 //cargar rutas
 var user_routes = require('./routes/user');
-var follow_routes = require('./routes/follow');
+var follow_routes = require('./routes/follow_routes');
 var post_routes = require('./routes/post_routes');
 var comment_routes = require('./routes/comment_routes');
 var message_routes = require('./routes/message_routes');
