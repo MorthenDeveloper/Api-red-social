@@ -12,7 +12,7 @@ var baseEndpoint = '/comments';
 // get
 api.get(baseEndpoint, md_auth.ensureAuth, CommentController.getComments);
 api.get(baseEndpoint + '/:id', md_auth.ensureAuth, CommentController.getCommentById);
-api.get(baseEndpoint + '?postId=:id', md_auth.ensureAuth, CommentController.getCommentsByPostId);
+api.get(baseEndpoint + '/postId/:postId', md_auth.ensureAuth, CommentController.getCommentsByPostId);
 
 // post
 api.post(baseEndpoint, CommentController.saveComment);

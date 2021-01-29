@@ -14,7 +14,7 @@ api.post(baseEndpoint, md_auth.ensureAuth, FollowController.saveFollow);
 api.delete(baseEndpoint + '/:id', md_auth.ensureAuth, FollowController.deleteFollow);
 
 // obtener follow by userfollowId
-api.get(baseEndpoint + '?userfollow=:id?', md_auth.ensureAuth, FollowController.getFollowByUserFollow);
+// api.get(baseEndpoint + '?userfollow=:id?', md_auth.ensureAuth, FollowController.);
 
 //OBTENER TODOS LOS USUARIOS A LOS ESTÁ SIGUIENDO EL USUARIO POR PARÁMETRO
 api.get('/following/:id?/:page?', md_auth.ensureAuth, FollowController.getFollowingUsers);

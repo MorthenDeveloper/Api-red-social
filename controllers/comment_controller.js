@@ -48,8 +48,7 @@ function getCommentById(req, res) {
 function getCommentsByPostId(req, res) {
     
     var postId = req.params.postId; //los datos que vienen por URL están en params, los datos por post o put es BODY
-    
-    return Comment.findByPostId(postId, function(err, comments){
+    return Comment.find({"postId": postId}, function(err, comments){
         if (err) {
             return res.status(500).json({ message: 'Error en la petición' });
         }
