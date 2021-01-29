@@ -31,7 +31,19 @@ function getPosts(req, res) {
     });
 }
 
+function getPostByUserId(req, res) {
+    
+    var userId = req.params.userId; //los datos que vienen por URL están en params, los datos por post o put es BODY
+    return Post.find({"user_id": userId}, function(err, posts){
+        if (err) {
+            return res.status(500).json({ message: 'Error en la petición' });
+        }
+        return res.json(posts);
+    });
+}
+
 module.exports = {
     savePost,
-    getPosts
+    getPosts,
+    getPostByUserId
 }
