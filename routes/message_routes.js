@@ -5,14 +5,18 @@ var MessageController = require('../controllers/message_controller');
 var api = express.Router();
 var md_auth = require('../middlewares/authenticated');
 
-//METODO DE PRUEBA
-api.get('/probando-md', md_auth.ensureAuth, MessageController.probando);
+var baseEndpoint = '/messages';
 
-//ENVIAR MENSAJE
-api.post('/sendmessage', md_auth.ensureAuth, MessageController.saveMessage);
+api.post(baseEndpoint, md_auth.ensureAuth, MessageController.saveMessage);
+api.get(baseEndpoint + '/:idEmitterUser/sent/:idReceiverUser', md_auth.ensureAuth, MessageController.getSentOrReceivedMessages);
+api.get(baseEndpoint + '/:idReceiverUser/received/:idEmitterUser', md_auth.ensureAuth, MessageController.getSentOrReceivedMessages);
+
 
 //MENSAJES RECIBIDOS, EL PARAMETRO PAGE ES OPCIONAL
 api.get('/my-messages/:page?', md_auth.ensureAuth, MessageController.getReceivedMessages);
+
+//METODO DE PRUEBA
+api.get('/probando-md', md_auth.ensureAuth, MessageController.probando);
 
 //MENSAJES ENVIADOS
 api.get('/messages/:page?', md_auth.ensureAuth, MessageController.getEmmitMessages);

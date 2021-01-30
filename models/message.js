@@ -4,10 +4,10 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var MessageSchema = Schema({
-    emitter: {
+    idEmitterUser: {
          type: Schema.ObjectId, ref: 'User' 
         },
-    receiver: {
+    idReceiverUser: {
          type: Schema.ObjectId, ref: 'User'
          },
     text: String,

@@ -7,10 +7,56 @@ var User = require('../models/user');
 var Follow = require('../models/follow');
 var Message = require('../models/message');
 
+/**
+ * GET: /messages/:idEmitterUser/sent/:idReceiverUser
+ */
+function getSentOrReceivedMessages(req, res) {
+    var idReceiverUser = req.params.idReceiverUser;
+    var idEmitterUser = req.params.idEmitterUser;
+    
+    return Message.find({
+            'idReceiverUser': idReceiverUser,
+            'idEmitterUser': idEmitterUser
+        },
+        function(err, messages){
+        if (err) {
+            return res.status(500).json({ message: 'Error en la petición' });
+        }
+        return res.json(messages);
+    });
+}
+
+/**
+ * POST: /messages
+ */
+function saveMessage(req, res) {
+    var params = req.body;
+    var message = new Message();
+
+    if (params.idEmitterUser && params.idReceiverUser && params.text) {
+        message.idEmitterUser = params.idEmitterUser;
+        message.idReceiverUser = params.idReceiverUser;
+        message.text = params.text;
+
+        message.save(function(err, msg){
+            if(err){
+                return res.status(500).json({ message: 'Error en la petición' });
+            }
+            return res.json(msg);
+        })
+    }
+}
+
+
+
+
+
 function probando(req, res) {
     res.status(200).send({ message: 'Hola que tal' })
 }
 
+
+/*
 function saveMessage(req, res) {
     var params = req.body;
 
@@ -37,6 +83,8 @@ function saveMessage(req, res) {
         });
     }
 }
+*/
+
 
 //MENSAJES RECIBIDOS
 function getReceivedMessages(req, res) {
@@ -50,22 +98,6 @@ function getReceivedMessages(req, res) {
     }
     //MENSAGES POR PÁGINA
     var itemsPerPage = 4;
-
-
-    /*Message.find({ receiver: userId }).populate('emitter').paginate(page, itemsPerPage, (err, messages, total) => {
-        if (err) {
-            return res.status(500).send({ message: 'Error en la petición' })
-        }
-        if (!messages) {
-            return res.status(404).send({ message: 'No hay mensajes' })
-        } else {
-            return res.status(200).send({
-                total: total,
-                pages: Math.ceil(total / itemsPerPage),
-                messages
-            });
-        }
-    });*/
 
     Message.find({ receiver: userId }).populate('emitter', 'name surname image nick _id').paginate(page, itemsPerPage, (err, messages, total) => {
         if (err) {
@@ -145,11 +177,13 @@ function setViewedMessages(req, res) {
 }
 
 
+
 module.exports = {
     probando,
     saveMessage,
     getReceivedMessages,
     getEmmitMessages,
     getUnviewedMessages,
-    setViewedMessages
+    setViewedMessages,
+    getSentOrReceivedMessages
 }
