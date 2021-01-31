@@ -1,5 +1,5 @@
 'use strict'
-
+var mongoose = require('mongoose');
 var moment = require('moment'); //
 var mongoosePaginate = require('mongoose-pagination');
 
@@ -11,17 +11,25 @@ var Message = require('../models/message');
  * GET: /messages/:idEmitterUser/sent/:idReceiverUser
  */
 function getSentOrReceivedMessages(req, res) {
-    var idReceiverUser = req.params.idReceiverUser;
-    var idEmitterUser = req.params.idEmitterUser;
-    
-    return Message.find({
-            'idReceiverUser': idReceiverUser,
-            'idEmitterUser': idEmitterUser
-        },
+    var idReceiverUser = mongoose.mongo.ObjectId(req.params.idReceiverUser);
+    var idEmitterUser = mongoose.mongo.ObjectId(req.params.idEmitterUser);
+
+    return Message.aggregate([
+            {$lookup:{from: 'users',localField: 'idEmitterUser',foreignField: '_id',as: 'user'}},
+            {$sort:{ created_at : 1 }},
+            {$match :
+                {$or: [
+                    { $and:[{ "idReceiverUser":idReceiverUser }, { "idEmitterUser" :idEmitterUser } ]}, 
+                    {$and :[{ "idReceiverUser": idEmitterUser}, { "idEmitterUser" :idReceiverUser  }]}]
+                }
+            },
+            {$project : {idEmitterUser:1,idReceiverUser:1,created_at:1,text:1,name:"$user.name"}}
+        ],
         function(err, messages){
         if (err) {
             return res.status(500).json({ message: 'Error en la petición' });
         }
+        console.log(messages);
         return res.json(messages);
     });
 }
@@ -37,6 +45,7 @@ function saveMessage(req, res) {
         message.idEmitterUser = params.idEmitterUser;
         message.idReceiverUser = params.idReceiverUser;
         message.text = params.text;
+        message.created_at = new Date();
 
         message.save(function(err, msg){
             if(err){

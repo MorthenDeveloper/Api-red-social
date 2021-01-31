@@ -11,7 +11,7 @@ var MessageSchema = Schema({
          type: Schema.ObjectId, ref: 'User'
          },
     text: String,
-    created_at: String,
+    created_at: Date,
     viewed: String //si el mensaje ha sido visto o no 
 });
 
